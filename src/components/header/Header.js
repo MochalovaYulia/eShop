@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import style from './Header.module.scss'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { FaShoppingCart, FaTimes } from 'react-icons/fa'
 import { HiOutlineMenuAlt3 } from 'react-icons/hi'
 
@@ -20,6 +20,10 @@ const cart = (
     <FaShoppingCart size={20} />
     <p>0</p>
   </Link>
+)
+
+const activeLink = (
+  ({isActive}) => (isActive ? `${style.active}` : '')
 )
 
 export const Header = () => {
@@ -50,17 +54,17 @@ export const Header = () => {
               <FaTimes size={22} color='#fff' onClick={hideMenu}/>
             </li>
             <li>
-              <Link to='/'>Home</Link>
+              <NavLink to='/' className={activeLink}>Home</NavLink>
             </li>
             <li>
-              <Link to='/contact'>Contact Us</Link>
+              <NavLink to='/contact' className={activeLink}>Contact Us</NavLink>
             </li>
           </ul>
           <div className={style['header-right']} onClick={hideMenu}>
             <span className={style.links}>
-              <Link to='/login'>Login</Link>
-              <Link to='/register'>Register</Link>
-              <Link to='/order-history'>My Orders</Link>
+              <NavLink to='/login' className={activeLink}>Login</NavLink>
+              <NavLink to='/register'className={activeLink}>Register</NavLink>
+              <NavLink to='/order-history' className={activeLink}>My Orders</NavLink>
             </span>
             <span className={style.cart}>
               {cart}
