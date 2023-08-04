@@ -26,7 +26,7 @@ export const Login = () => {
                         <button className='--btn --btn-danger --btn-block'><FaGoogle color='#fff' /> Login With Google</button>
                         <span className={styles.register}>
                             <p>Don't have an account?</p>
-                            <Link to='/register'>Regicter</Link>
+                            <Link to='/register'>Register</Link>
                         </span>
                     </form>
                 </div>
