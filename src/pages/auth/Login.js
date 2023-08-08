@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Card } from '../../components/card/Card'
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../../firebase/config'
-import { toast } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import { Loader } from '../../components/loader/Loader'
 
 export const Login = () => {
@@ -35,6 +35,7 @@ export const Login = () => {
     return (
         <>
             {isLoading && <Loader />}
+            <ToastContainer />
             <section className={`container ${styles.auth}`}>
                 <div className={styles.img}>
                     <img src={loginImg} alt='login' width='400' />
