@@ -4,7 +4,7 @@ import loginImg from '../../assets/login.png'
 import { FaGoogle } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
 import { Card } from '../../components/card/Card'
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup  } from "firebase/auth";
 import { auth } from '../../firebase/config'
 import { ToastContainer, toast } from 'react-toastify'
 import { Loader } from '../../components/loader/Loader'
@@ -24,9 +24,27 @@ export const Login = () => {
                 const user = userCredential.user;
                 setIsLoading(false)
                 navigate('/')
-                toast.success('Login Successfull!')
+                toast.success('Login Successfully!')
             })
             .catch((error) => {
+                setIsLoading(false)
+                toast.error(error.message)
+            });
+    }
+
+    const provider = new GoogleAuthProvider();
+
+    const SingInWithGoogle = (e) => {
+        e.preventDefault()
+        setIsLoading(true)
+
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                const user = result.user;
+                setIsLoading(false)
+                navigate('/')
+                toast.success('Login Successfully!')
+            }).catch((error) => {
                 setIsLoading(false)
                 toast.error(error.message)
             });
@@ -52,7 +70,7 @@ export const Login = () => {
                                 <Link to='/reset'>Reset Password</Link>
                             </div>
                             <p>-- or --</p>
-                            <button type='submit' className='--btn --btn-danger --btn-block'><FaGoogle color='#fff' /> Login With Google</button>
+                            <button onClick={SingInWithGoogle} type='submit' className='--btn --btn-danger --btn-block'><FaGoogle color='#fff' /> Login With Google</button>
                             <span className={styles.register}>
                                 <p>Don't have an account?</p>
                                 <Link to='/register'>Register</Link>
