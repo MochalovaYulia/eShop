@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from './Header.module.scss'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { FaShoppingCart, FaTimes } from 'react-icons/fa'
+import { FaShoppingCart, FaTimes, FaUserCircle } from 'react-icons/fa'
 import { HiOutlineMenuAlt3 } from 'react-icons/hi'
-import { signOut } from "firebase/auth";
+import { signOut, onAuthStateChanged  } from "firebase/auth";
 import { auth } from '../../firebase/config'
 import { ToastContainer, toast } from 'react-toastify'
 
@@ -30,9 +30,20 @@ const activeLink = (
 )
 
 export const Header = () => {
-
   const [showMenu, setShowMenu] = useState(false)
   const navigate = useNavigate();
+  const [displayName, setDisplayName] = useState('')
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const uid = user.uid;
+        setDisplayName(user.displayName)
+      } else {
+        setDisplayName('')
+      }
+    });
+  }, [])
 
   const toggleMenu = () => {
     setShowMenu(!showMenu)
@@ -78,6 +89,10 @@ export const Header = () => {
             </ul>
             <div className={style['header-right']} onClick={hideMenu}>
               <span className={style.links}>
+                <a href='#'>
+                  <FaUserCircle size={16}/>
+                  Hi, {displayName}
+                </a>
                 <NavLink to='/login' className={activeLink}>Login</NavLink>
                 <NavLink to='/register' className={activeLink}>Register</NavLink>
                 <NavLink to='/order-history' className={activeLink}>My Orders</NavLink>
