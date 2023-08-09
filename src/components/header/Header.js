@@ -6,6 +6,8 @@ import { HiOutlineMenuAlt3 } from 'react-icons/hi'
 import { signOut, onAuthStateChanged  } from "firebase/auth";
 import { auth } from '../../firebase/config'
 import { ToastContainer, toast } from 'react-toastify'
+import { useDispatch } from 'react-redux'
+import { set_active_user } from '../../redux/slice/authSlice'
 
 const logo = (
   <div className={style.logo}>
@@ -31,14 +33,22 @@ const activeLink = (
 
 export const Header = () => {
   const [showMenu, setShowMenu] = useState(false)
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const [displayName, setDisplayName] = useState('')
+  const dispatch = useDispatch()
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        const uid = user.uid;
         setDisplayName(user.displayName)
+        console.log(user)
+
+        dispatch(set_active_user({
+          email: user.email,
+          userName: user.displayName,
+          userId: user.uid,
+        }))
+
       } else {
         setDisplayName('')
       }
