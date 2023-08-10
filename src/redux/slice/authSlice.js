@@ -16,7 +16,6 @@ const authSlice = createSlice({
         state.email = action.payload.email
         state.userName = action.payload.userName
         state.userId = action.payload.userId
-        console.log(state)
     }
   }
 });

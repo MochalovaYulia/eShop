@@ -3,7 +3,7 @@ import style from './Header.module.scss'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { FaShoppingCart, FaTimes, FaUserCircle } from 'react-icons/fa'
 import { HiOutlineMenuAlt3 } from 'react-icons/hi'
-import { signOut, onAuthStateChanged  } from "firebase/auth";
+import { signOut, onAuthStateChanged } from "firebase/auth";
 import { auth } from '../../firebase/config'
 import { ToastContainer, toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
@@ -40,17 +40,22 @@ export const Header = () => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setDisplayName(user.displayName)
-        console.log(user)
+
+        if (user.displayName == null) {
+          const u1 = user.email.slice(0, -10);
+          const uName = u1.charAt(0).toUpperCase() + u1.slice(1);
+          setDisplayName(uName);
+        } else {
+          setDisplayName(user.displayName);
+        }
 
         dispatch(set_active_user({
           email: user.email,
-          userName: user.displayName,
+          userName: user.displayName ? user.displayName : displayName,
           userId: user.uid,
         }))
-
       } else {
-        setDisplayName('')
+        setDisplayName("");
       }
     });
   }, [])
@@ -100,7 +105,7 @@ export const Header = () => {
             <div className={style['header-right']} onClick={hideMenu}>
               <span className={style.links}>
                 <a href='#'>
-                  <FaUserCircle size={16}/>
+                  <FaUserCircle size={16} />
                   Hi, {displayName}
                 </a>
                 <NavLink to='/login' className={activeLink}>Login</NavLink>
