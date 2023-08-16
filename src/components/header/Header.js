@@ -8,6 +8,7 @@ import { auth } from '../../firebase/config'
 import { ToastContainer, toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 import { remove_active_user, set_active_user } from '../../redux/slice/authSlice'
+import { ShowOnLogin, ShowOnLogout } from '../hiddenLink/HiddenLink'
 
 const logo = (
   <div className={style.logo}>
@@ -105,14 +106,16 @@ export const Header = () => {
             </ul>
             <div className={style['header-right']} onClick={hideMenu}>
               <span className={style.links}>
-                <a href='#home'>
-                  <FaUserCircle size={16} />
-                  Hi, {displayName}
-                </a>
-                <NavLink to='/login' className={activeLink}>Login</NavLink>
-                <NavLink to='/register' className={activeLink}>Register</NavLink>
-                <NavLink to='/order-history' className={activeLink}>My Orders</NavLink>
-                <NavLink to='/' onClick={LogoutUser}>Logout</NavLink>
+                <ShowOnLogin>
+                  <a href='#home' style={{color: '#ff7722'}}>
+                    <FaUserCircle size={16} />
+                    Hi, {displayName}
+                  </a>
+                </ShowOnLogin>
+                <ShowOnLogout><NavLink to='/login' className={activeLink}>Login</NavLink></ShowOnLogout>
+                {/* <ShowOnLogout><NavLink to='/register' className={activeLink}>Register</NavLink></ShowOnLogout> */}
+                <ShowOnLogin><NavLink to='/order-history' className={activeLink}>My Orders</NavLink></ShowOnLogin>
+                <ShowOnLogin><NavLink to='/' onClick={LogoutUser}>Logout</NavLink></ShowOnLogin>
               </span>
               <span className={style.cart}>
                 {cart}
