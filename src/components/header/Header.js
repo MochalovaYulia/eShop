@@ -7,7 +7,7 @@ import { signOut, onAuthStateChanged } from "firebase/auth";
 import { auth } from '../../firebase/config'
 import { ToastContainer, toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
-import { set_active_user } from '../../redux/slice/authSlice'
+import { remove_active_user, set_active_user } from '../../redux/slice/authSlice'
 
 const logo = (
   <div className={style.logo}>
@@ -42,7 +42,7 @@ export const Header = () => {
       if (user) {
 
         if (user.displayName == null) {
-          const u1 = user.email.slice(0, -10);
+          const u1 = user.email.substring(0, user.email.indexOf('@'));
           const uName = u1.charAt(0).toUpperCase() + u1.slice(1);
           setDisplayName(uName);
         } else {
@@ -56,9 +56,10 @@ export const Header = () => {
         }))
       } else {
         setDisplayName("");
+        dispatch(remove_active_user())
       }
     });
-  }, [])
+  }, [dispatch, displayName])
 
   const toggleMenu = () => {
     setShowMenu(!showMenu)
@@ -104,7 +105,7 @@ export const Header = () => {
             </ul>
             <div className={style['header-right']} onClick={hideMenu}>
               <span className={style.links}>
-                <a href='#'>
+                <a href='#home'>
                   <FaUserCircle size={16} />
                   Hi, {displayName}
                 </a>
