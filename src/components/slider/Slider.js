@@ -9,10 +9,6 @@ export const Slider = () => {
     const autoScroll = true;
     let slideInterval;
 
-    function auto() {
-        slideInterval = setInterval(nextSlide, 5000)
-    }
-
     const nextSlide = () => {
         setCurrentSlider(currentSlider === sliderLength - 1 ? 0 : currentSlider + 1)
     }
@@ -27,10 +23,13 @@ export const Slider = () => {
 
     useEffect(() => {
         if (autoScroll) {
+            const auto = () => {
+                slideInterval = setInterval(nextSlide, 5000)
+            }
             auto()
         }
         return () => clearInterval(slideInterval)
-    }, [currentSlider])
+    }, [currentSlider, slideInterval, autoScroll])
 
     return (
         <div className='slider'>
@@ -41,7 +40,7 @@ export const Slider = () => {
                 sliderData.map((slide, index) => {
                     const { image, heading, desc } = slide
                     return (
-                        <div className={index === currentSlider ? 'slide current' : 'slide'}>
+                        <div key={index} className={index === currentSlider ? 'slide current' : 'slide'}>
                             {
                                 <>
                                     <img src={image} alt='slide' />

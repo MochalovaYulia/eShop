@@ -9,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 import { remove_active_user, set_active_user } from '../../redux/slice/authSlice'
 import { ShowOnLogin, ShowOnLogout } from '../hiddenLink/HiddenLink'
+import { AdminOnlyRoute } from '../adminOnlyRoute/AdminOnlyRoute'
 
 const logo = (
   <div className={style.logo}>
@@ -96,6 +97,9 @@ export const Header = () => {
               <li className={style['logo-mobile']}>
                 {logo}
                 <FaTimes size={22} color='#fff' onClick={hideMenu} />
+              </li>
+              <li>
+                <AdminOnlyRoute><button className='--btn --btn-primary'>Admin</button></AdminOnlyRoute>
               </li>
               <li>
                 <NavLink to='/' className={activeLink}>Home</NavLink>
