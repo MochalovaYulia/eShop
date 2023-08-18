@@ -16,14 +16,12 @@ const authSlice = createSlice({
         state.email = action.payload.email
         state.userName = action.payload.userName
         state.userId = action.payload.userId
-        console.log(action.payload)
     },
     remove_active_user(state) {
       state.isLoggedIn = false
       state.email = null
       state.userName = null
       state.userId = null
-      console.log(state.isLoggedIn)
     }
   }
 });

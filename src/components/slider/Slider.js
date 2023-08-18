@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Slider.scss'
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai'
 import { sliderData } from './Slider-data'
@@ -6,6 +6,12 @@ import { sliderData } from './Slider-data'
 export const Slider = () => {
     const [currentSlider, setCurrentSlider] = useState(0)
     const sliderLength = sliderData.length
+    const autoScroll = true;
+    let slideInterval;
+
+    function auto() {
+        slideInterval = setInterval(nextSlide, 5000)
+    }
 
     const nextSlide = () => {
         setCurrentSlider(currentSlider === sliderLength - 1 ? 0 : currentSlider + 1)
@@ -15,14 +21,25 @@ export const Slider = () => {
         setCurrentSlider(currentSlider === 0 ? sliderLength - 1 : currentSlider - 1)
     }
 
+    useEffect(() => {
+        setCurrentSlider(0)
+    }, [])
+
+    useEffect(() => {
+        if (autoScroll) {
+            auto()
+        }
+        return () => clearInterval(slideInterval)
+    }, [currentSlider])
+
     return (
         <div className='slider'>
             <AiOutlineArrowLeft className='arrow prev' onClick={prevSlide} />
-            <AiOutlineArrowRight className='arrow next' onClick={nextSlide}/>
+            <AiOutlineArrowRight className='arrow next' onClick={nextSlide} />
 
             {
                 sliderData.map((slide, index) => {
-                    const {image, heading, desc} = slide
+                    const { image, heading, desc } = slide
                     return (
                         <div className={index === currentSlider ? 'slide current' : 'slide'}>
                             {
