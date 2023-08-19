@@ -1,7 +1,49 @@
 import React from 'react'
+import styles from './Navbar.module.scss'
+import {FaUserCircle} from 'react-icons/fa'
+import { useSelector } from 'react-redux'
+import { selectedUserName } from '../../../redux/slice/authSlice'
+import { NavLink } from 'react-router-dom'
+import { Home } from '../home/Home'
+import { AddProduct } from '../addProduct/AddProduct'
+import { ViewProduct } from '../viewProduct/ViewProduct'
+import { Oders } from '../oders/Oders'
 
 export const Navbar = () => {
+  const activeLink = ({isActive}) => (isActive ? `${styles.active}` : '')
+
+  const userName = useSelector(selectedUserName)
+
   return (
-    <div>Navbar</div>
+    <div className={styles.navbar}>
+      <div className={styles.user}>
+        <FaUserCircle size={40} color='#fff'/>
+        <h4>{userName}</h4>
+      </div>
+      <nav>
+        <ul>
+          <li>
+            <NavLink to='/admin/home' className={activeLink}>
+              <Home />
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to='/admin/all-product' className={activeLink}>
+              <ViewProduct />
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to='/admin/add-product' className={activeLink}>
+              <AddProduct />
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to='/admin/oders' className={activeLink}>
+              <Oders />
+            </NavLink>
+          </li>
+        </ul>
+      </nav>
+    </div>
   )
 }
