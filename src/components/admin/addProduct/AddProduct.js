@@ -20,14 +20,23 @@ export const AddProduct = () => {
     desc: '',
   })
 
-  const handleInputChange = (e) => { }
-  const handleImageChange = (e) => { }
+  const handleInputChange = (e) => {
+    const {name, value} = e.target
+    setProduct({...product, [name]: value})
+  }
+
+  const handleImageChange = (e) => {}
+
+  const addProduct = (e) => {
+    e.preventDefault()
+    console.log(product)
+  }
 
   return (
     <div className={styles.product}>
       <h1>Add New Product</h1>
       <Card cardClass={styles.card}>
-        <form>
+        <form onSubmit={addProduct}>
           <label>Product Name:</label>
           <input
             type='text'
@@ -55,6 +64,7 @@ export const AddProduct = () => {
             <input 
               type='text' 
               name='imageURL'
+              placeholder='Image URL'
               value={product.imageURL}
               required
               disabled
