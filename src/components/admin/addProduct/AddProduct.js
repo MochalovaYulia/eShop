@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
 import styles from './AddProduct.module.scss'
 import { Card } from '../../card/Card'
-import { ref, uploadBytesResumable } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from '../../../firebase/config';
+import { toast } from 'react-toastify';
 
 export const AddProduct = () => {
 
+  const [UploadProgress, setUploadProgress] = useState(0);
+
   const categories = [
-    {id: 1, name: 'Laptop'},
-    {id: 2, name: 'Electronics'},
-    {id: 3, name: 'Fashion'},
-    {id: 4, name: 'Phone'},
+    { id: 1, name: 'Laptop' },
+    { id: 2, name: 'Electronics' },
+    { id: 3, name: 'Fashion' },
+    { id: 4, name: 'Phone' },
   ]
 
   const [product, setProduct] = useState({
@@ -23,15 +26,32 @@ export const AddProduct = () => {
   })
 
   const handleInputChange = (e) => {
-    const {name, value} = e.target
-    setProduct({...product, [name]: value})
+    const { name, value } = e.target
+    setProduct({ ...product, [name]: value })
   }
 
   const handleImageChange = (e) => {
     const file = e.target.files[0]
 
-    const storageRef = ref(storage, `eshop/${Date.now()}${file.name}`); 
+    const storageRef = ref(storage, `eshop/${Date.now()}${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100; 
+        setUploadProgress(progress)
+      },
+      (error) => {
+        toast.error(error.message)
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setProduct({...product, imageURL: downloadURL})
+          toast.success('Image uploaded successfully!')
+        });
+      }
+    );
+
   }
 
   const addProduct = (e) => {
@@ -56,40 +76,45 @@ export const AddProduct = () => {
 
           <label>Product Image:</label>
           <Card cardClass={styles.group}>
-            <div className={styles.progress}>
-              <div className={styles['progress-bar']} style={{width: '50%'}}>
-                Uploading 50%
+            {UploadProgress === 0 ? null : (
+              <div className={styles.progress}>
+                <div className={styles['progress-bar']} style={{ width:  `${UploadProgress} %` }}>
+                  {UploadProgress < 100 ? `Uploading ${UploadProgress}` : `Upload Copmlete ${UploadProgress}%`}
+                </div>
               </div>
-            </div>
-            <input 
-              type='file' 
+            )}
+            
+            <input
+              type='file'
               accept='image/*'
-              name='image' 
+              name='image'
               placeholder='Product image'
               onChange={(e) => handleImageChange(e)}
             />
-            <input 
-              type='text' 
+            {product.imageURL === '' ? null : (
+              <input
+              type='text'
               name='imageURL'
               placeholder='Image URL'
               value={product.imageURL}
               required
               disabled
             />
+            )}
           </Card>
 
           <label>Product Price:</label>
-          <input 
+          <input
             type='number'
             placeholder='Product price'
             required
             name='price'
             value={product.price}
             onChange={(e) => handleInputChange(e)}
-            />
-          
+          />
+
           <label>Product Category:</label>
-          <select 
+          <select
             name='category'
             value={product.category}
             onChange={(e) => handleInputChange(e)}
@@ -105,19 +130,19 @@ export const AddProduct = () => {
           </select>
 
           <label>Product Company/Brand:</label>
-          <input 
-            type='text' 
-            name='brand' 
+          <input
+            type='text'
+            name='brand'
             placeholder='Product Brand'
             value={product.brand}
-            onChange={(e) => handleInputChange(e)} 
-            required 
+            onChange={(e) => handleInputChange(e)}
+            required
           />
 
           <label>Product Description:</label>
-          <textarea 
-            type= 'text' 
-            name='desc' 
+          <textarea
+            type='text'
+            name='desc'
             value={product.desc}
             onChange={(e) => handleInputChange(e)}
             required
