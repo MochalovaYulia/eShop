@@ -7,6 +7,7 @@ import { Loader } from '../../loader/Loader'
 import { Link } from 'react-router-dom'
 import {FaEdit, FaTrashAlt} from 'react-icons/fa'
 import { deleteObject, ref } from 'firebase/storage'
+import Notiflix from 'notiflix'
 
 export const ViewProduct = () => {
   const [products, setProducts] = useState([])
@@ -38,6 +39,26 @@ export const ViewProduct = () => {
       setIsLoading(false)
       toast.error(error.message)
     }
+  }
+
+  const confirmDelete = (id, imageURL) => {
+    Notiflix.Confirm.show(
+      'Delete Product!!!',
+      'You are about to delete this product?',
+      'Delete',
+      'Cancel',
+      function okCb() {
+        deleteProduct(id, imageURL)
+      },
+      function cancelCb() {},
+      {
+        width: '320px',
+        borderRadius: '8px',
+        titleColor: 'orangered',
+        okButtonBackground: 'orangered',
+        cssAnimationStyle: 'zoom',
+      },
+    );
   }
 
   const deleteProduct = async(id, imageURL) => {
@@ -85,12 +106,12 @@ export const ViewProduct = () => {
                     <td>{name}</td>
                     <td>{category}</td>
                     <td>${price}</td>
-                    <td>
+                    <td className={styles.icons}>
                       <Link to='/admit/add-product'>
                         <FaEdit size={20} color='green' />
                       </Link>
                       &nbsp;
-                      <FaTrashAlt size={18} color='red' onClick={() => deleteProduct(id, imageURL)}/>
+                      <FaTrashAlt size={18} color='red' onClick={() => confirmDelete(id, imageURL)}/>
                     </td>
                   </tr>
                 </tbody>
