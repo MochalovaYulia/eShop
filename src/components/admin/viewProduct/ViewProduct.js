@@ -8,10 +8,13 @@ import { Link } from 'react-router-dom'
 import {FaEdit, FaTrashAlt} from 'react-icons/fa'
 import { deleteObject, ref } from 'firebase/storage'
 import Notiflix from 'notiflix'
+import { store_products } from '../../../redux/slice/productSlice'
+import { useDispatch } from 'react-redux'
 
 export const ViewProduct = () => {
   const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     getProducts()
@@ -31,9 +34,13 @@ export const ViewProduct = () => {
           ...doc.data(),
         }))
         setProducts(allProducts);
+        setIsLoading(false)
+        dispatch(
+          store_products({
+            products: allProducts,
+          })
+        );
       })
-
-      setIsLoading(false)
     
     } catch (error) {
       setIsLoading(false)
