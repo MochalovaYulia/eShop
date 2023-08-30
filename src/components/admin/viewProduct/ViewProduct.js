@@ -114,7 +114,7 @@ export const ViewProduct = () => {
                     <td>{category}</td>
                     <td>${price}</td>
                     <td className={styles.icons}>
-                      <Link to='/admit/add-product'>
+                      <Link to={`/admin/add-product/${id}`}>
                         <FaEdit size={20} color='green' />
                       </Link>
                       &nbsp;
