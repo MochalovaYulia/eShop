@@ -5,34 +5,46 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { db, storage } from '../../../firebase/config';
 import { toast } from 'react-toastify';
 import { Timestamp, addDoc, collection } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Loader } from '../../loader/Loader';
+import { useSelector } from 'react-redux';
+import { selectProduct } from '../../../redux/slice/productSlice';
+
+const categories = [
+  { id: 1, name: "Laptop" },
+  { id: 2, name: "Electronics" },
+  { id: 3, name: "Fashion" },
+  { id: 4, name: "Phone" },
+];
+
+const initialState = {
+  name: "",
+  imageURL: "",
+  price: 0,
+  category: "",
+  brand: "",
+  desc: "",
+};
 
 export const AddProduct = () => {
-
+  const {id} = useParams();
   const [UploadProgress, setUploadProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate()
+  const products = useSelector(selectProduct)
+  const productEdit = products.find((item) => item.id === id)
+ 
+  const [product, setProduct] = useState(() => {
+    const newState = detectForm(id, { ...initialState }, productEdit);
+    return newState;
+  });
 
-  const categories = [
-    { id: 1, name: 'Laptop' },
-    { id: 2, name: 'Electronics' },
-    { id: 3, name: 'Fashion' },
-    { id: 4, name: 'Phone' },
-  ]
-
-  const initialState = {
-    name: '',
-    imageURL: '',
-    price: 0,
-    category: '',
-    brand: '',
-    desc: '',
+  function detectForm(id, f1, f2) {
+    if(id === 'ADD') {
+      return f1
+    }
+    return f2
   }
-
-  const [product, setProduct] = useState({
-    ...initialState
-  })
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -87,16 +99,30 @@ export const AddProduct = () => {
       toast.error(error.message)
       setIsLoading(false)
     }
-
   }
+
+  const editProduct = (e) => {
+    e.preventDefault()
+    setIsLoading(true)
+
+    try {
+      const product = {
+
+      }
+      setIsLoading(false)
+    } catch (error) {
+      toast.error(error.message)
+      setIsLoading(false)
+    }
+  } 
 
   return (
     <>
     {isLoading && <Loader />}
       <div className={styles.product}>
-        <h1>Add New Product</h1>
+        <h2>{detectForm(id, 'Add New Product', 'Edit Product')}</h2>
         <Card cardClass={styles.card}>
-          <form onSubmit={addProduct}>
+          <form onSubmit={detectForm(id, addProduct, editProduct)}>
             <label>Product Name:</label>
             <input
               type='text'
@@ -183,7 +209,7 @@ export const AddProduct = () => {
               rows='10'
             />
 
-            <button className='--btn --btn-primary'>Save Product</button>
+            <button className='--btn --btn-primary'>{detectForm(id, "Save Product", 'Edit Product')}</button>
           </form>
         </Card>
       </div>
