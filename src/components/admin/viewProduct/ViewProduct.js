@@ -1,52 +1,30 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import styles from './ViewProduct.module.scss'
 import { toast } from 'react-toastify'
-import { collection, deleteDoc, doc, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { deleteDoc, doc } from 'firebase/firestore'
 import { db, storage } from '../../../firebase/config'
 import { Loader } from '../../loader/Loader'
 import { Link } from 'react-router-dom'
 import {FaEdit, FaTrashAlt} from 'react-icons/fa'
 import { deleteObject, ref } from 'firebase/storage'
 import Notiflix from 'notiflix'
-import { store_products } from '../../../redux/slice/productSlice'
-import { useDispatch } from 'react-redux'
+import { selectProduct, store_products } from '../../../redux/slice/productSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { useFetchCollection } from '../../../customHooks/useFetchCollection'
 
 export const ViewProduct = () => {
-  const [products, setProducts] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const { data, isLoading } = useFetchCollection('product')
+  const products = useSelector(selectProduct)
+  
   const dispatch = useDispatch()
 
   useEffect(() => {
-    getProducts()
-  }, [])
-
-  const getProducts = () => {
-    setIsLoading(true)
-
-    try {
-
-      const productsRef = collection(db, "product");
-      const q = query(productsRef, orderBy("createAt", "desc"));
-
-      onSnapshot(q, (snapshot) => {
-        const allProducts = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
-        setProducts(allProducts);
-        setIsLoading(false)
-        dispatch(
-          store_products({
-            products: allProducts,
-          })
-        );
+    dispatch(
+      store_products({
+        products: data,
       })
-    
-    } catch (error) {
-      setIsLoading(false)
-      toast.error(error.message)
-    }
-  }
+    );
+  }, [dispatch, data])
 
   const confirmDelete = (id, imageURL) => {
     Notiflix.Confirm.show(
@@ -69,16 +47,13 @@ export const ViewProduct = () => {
   }
 
   const deleteProduct = async(id, imageURL) => {
-    setIsLoading(true)
     try {
       await deleteDoc(doc(db, "product", id));
       const storageRef = ref(storage, imageURL);
       await deleteObject(storageRef)
       toast.success('Product Deleted Successfully.')
-      setIsLoading(false)
     } catch (error) {
       toast.error(error.massage)
-      setIsLoading(false)
     }
   }
 

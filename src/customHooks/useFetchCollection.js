@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { db } from "../firebase/config"
 import { toast } from "react-toastify"
 
-const useFetchCollection = ({collectionName}) => {
+export const useFetchCollection = (collectionName) => {
     const [data, setData] = useState([])
     const [isLoading, setIsLoading] = useState(false)
 
@@ -11,9 +11,8 @@ const useFetchCollection = ({collectionName}) => {
         setIsLoading(true)
     
         try {
-    
-          const productsRef = collection(db, collectionName);
-          const q = query(productsRef, orderBy("createAt", "desc"));
+          const docRef = collection(db, collectionName);
+          const q = query(docRef, orderBy("createAt", "desc"));
     
           onSnapshot(q, (snapshot) => {
             const allData = snapshot.docs.map((doc) => ({
