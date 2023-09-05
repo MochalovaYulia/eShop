@@ -15,7 +15,7 @@ export const ProductItem = ({ grid, product, id, name, imageURL, desc, price }) 
 
   return (
     <Card cardClass={grid ? `${styles.grid}` : `${styles.list}`}>
-      <Link to={`/product-details`}>
+      <Link to={`/product-details/${id}`}>
         <div className={styles.img}>
           <img src={imageURL} alt={name} />
         </div>
