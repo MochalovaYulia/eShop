@@ -5,10 +5,11 @@ import { ProductList } from './productList/productList'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFetchCollection } from '../../customHooks/useFetchCollection'
 import { selectProduct, store_products } from '../../redux/slice/productSlice'
+import spinnerImg from '../../assets/spinner.jpg'
 
 export const Product = () => {
 
-  const { data } = useFetchCollection('product')
+  const { data, isLoading } = useFetchCollection('product')
   const products = useSelector(selectProduct)
 
   const dispatch = useDispatch()
@@ -25,11 +26,15 @@ export const Product = () => {
     <section>
       <div className={`container ${styles.product}`}>
         <aside className={styles.filter}>
-          <ProductFilter />
+          {isLoading ? null : <ProductFilter />}
         </aside>
 
         <div className={styles.content}>
-          <ProductList products={products} />
+          {isLoading ? (
+            <img src={spinnerImg} alt='Loading...' style={{ width: '150px' }} className='--center-all' />
+          ) : (
+            <ProductList products={products} />
+          )}
         </div>
       </div>
     </section>
