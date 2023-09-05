@@ -8,31 +8,30 @@ import { selectProduct, store_products } from '../../redux/slice/productSlice'
 
 export const Product = () => {
 
-    const { data } = useFetchCollection('product')
-    const products = useSelector(selectProduct)
-    
-    const dispatch = useDispatch()
-  
-    useEffect(() => {
-      dispatch(
-        store_products({
-          products: data,
-        })
-      );
-    }, [dispatch, data])
+  const { data } = useFetchCollection('product')
+  const products = useSelector(selectProduct)
 
+  const dispatch = useDispatch()
 
-    return (
-        <section>
-            <div className={`container ${styles.product}`}>
-                <aside className={styles.filter}>
-                    <ProductFilter />
-                </aside>
+  useEffect(() => {
+    dispatch(
+      store_products({
+        products: data,
+      })
+    );
+  }, [dispatch, data])
 
-                <div className={styles.content}>
-                    <ProductList products={products}/>
-                </div>
-            </div>
-        </section>
-    )
+  return (
+    <section>
+      <div className={`container ${styles.product}`}>
+        <aside className={styles.filter}>
+          <ProductFilter />
+        </aside>
+
+        <div className={styles.content}>
+          <ProductList products={products} />
+        </div>
+      </div>
+    </section>
+  )
 }

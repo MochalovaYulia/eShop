@@ -3,6 +3,7 @@ import styles from './productList.module.scss'
 import { BsFillGridFill } from 'react-icons/bs'
 import { FaListAlt } from 'react-icons/fa'
 import { Search } from '../../search/Search'
+import { ProductItem } from '../productItem/productItem'
 
 export const ProductList = ({ products }) => {
   const [grid, setGrid] = useState(true)
@@ -31,7 +32,23 @@ export const ProductList = ({ products }) => {
             <option value='z-a'>Z - A</option>
           </select>
         </div>
+        
       </div>
+      <div className={grid ? `${styles.grid}` : `${styles.list}`}>
+          {products.lenght === 0 ? (
+            <p>No Product found</p>
+          ) : (
+            <>
+              {products.map((product) => {
+                return (
+                  <div key={product.id}>
+                    <ProductItem {...product} grid={grid} product={product} />
+                  </div>
+                )
+              })}
+            </>
+          )}
+        </div>
     </div>
   )
 }
