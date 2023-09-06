@@ -33,7 +33,7 @@ export const ProductDetails = () => {
             <div className={`container ${styles.product}`}>
                 <h2>productDetails</h2>
                 <div>
-                    <Link to={'#/products'}>&larr; Back to products</Link>
+                    <Link to={'/#products'}>&larr; Back to products</Link>
                 </div>
                 {product === null ? (
                     <img src={spinnerImg} alt='Loading...' />
