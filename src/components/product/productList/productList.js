@@ -1,13 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './productList.module.scss'
 import { BsFillGridFill } from 'react-icons/bs'
 import { FaListAlt } from 'react-icons/fa'
 import { Search } from '../../search/Search'
 import { ProductItem } from '../productItem/productItem'
+import { useDispatch, useSelector } from 'react-redux'
+import { filter_by_search, selectFilteredProducts } from '../../../redux/slice/filterSlice'
 
 export const ProductList = ({ products }) => {
   const [grid, setGrid] = useState(true)
   const [search, setSearch] = useState('')
+  const filteredProducts = useSelector(selectFilteredProducts)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(filter_by_search({products, search}))
+  }, [dispatch, products, search])
 
   return (
     <div className={styles['product-list']} id='product'>
@@ -39,7 +47,7 @@ export const ProductList = ({ products }) => {
             <p>No Product found</p>
           ) : (
             <>
-              {products.map((product) => {
+              {filteredProducts.map((product) => {
                 return (
                   <div key={product.id}>
                     <ProductItem {...product} grid={grid} product={product} />
