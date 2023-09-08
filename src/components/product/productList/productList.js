@@ -5,17 +5,22 @@ import { FaListAlt } from 'react-icons/fa'
 import { Search } from '../../search/Search'
 import { ProductItem } from '../productItem/productItem'
 import { useDispatch, useSelector } from 'react-redux'
-import { filter_by_search, selectFilteredProducts } from '../../../redux/slice/filterSlice'
+import { filter_by_search, selectFilteredProducts, sort_products } from '../../../redux/slice/filterSlice'
 
 export const ProductList = ({ products }) => {
   const [grid, setGrid] = useState(true)
   const [search, setSearch] = useState('')
+  const [sort, setSort] = useState('latest')
   const filteredProducts = useSelector(selectFilteredProducts)
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(filter_by_search({products, search}))
   }, [dispatch, products, search])
+
+  useEffect(() => {
+    dispatch(sort_products({products, sort}))
+  }, [dispatch, products, sort])
 
   return (
     <div className={styles['product-list']} id='product'>
@@ -24,7 +29,7 @@ export const ProductList = ({ products }) => {
           <BsFillGridFill size={22} color='orangered' onClick={() => setGrid(true)} />
           <FaListAlt size={24} color='#0066d4' onClick={() => setGrid(false)} />
           <p>
-            <b>10</b> Products found.
+            <b>{filteredProducts.length}</b> Products found.
           </p>
         </div>
 
@@ -32,7 +37,7 @@ export const ProductList = ({ products }) => {
 
         <div className={styles.sort}>
           <label>Sort by:</label>
-          <select>
+          <select value={sort} onChange={(e) => setSort(e.target.value)}>
             <option value='latest'>Latest</option>
             <option value='lowest-price'>Lowest Price</option>
             <option value='higest-price'>Higest Price</option>
