@@ -43,6 +43,16 @@ const filterSlice = createSlice({
                 })
             }
             state.filteredProducts = tempProducts
+        },
+        filter_by_category(state, action) {
+            const {products, category} = action.payload
+            let tempProducts = []
+            if (category === 'All') {
+                tempProducts = products
+            } else {
+                tempProducts = products.filter((product) => product.category === category)
+            }
+            state.filteredProducts = tempProducts   
         }
     }
 })
@@ -50,5 +60,5 @@ const filterSlice = createSlice({
 export const selectFilteredProducts = (state) => state.filter.filteredProducts
 export const selectSortProducts = (state) => state.filter.sort
 
-export const { filter_by_search, sort_products } = filterSlice.actions
+export const { filter_by_search, sort_products, filter_by_category } = filterSlice.actions
 export default filterSlice.reducer
