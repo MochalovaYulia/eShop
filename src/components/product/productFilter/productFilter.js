@@ -22,19 +22,25 @@ export const ProductFilter = () => {
     'All',
     ...new Set(products.map((product) => product.brand))
   ]
-  
+
   const filterProducts = (cat) => {
     setCategory(cat)
-    dispatch(filter_by_category({products, category: cat}))
+    dispatch(filter_by_category({ products, category: cat }))
   }
 
- useEffect(() => {
-  dispatch(filter_by_brand({products, brand}))
- }, [dispatch, products, brand])
+  const clearFilters = () => {
+    setCategory('All')
+    setBrand('All')
+    setPrice(maxPrice)
+  }
 
- useEffect(() => {
-  dispatch(filter_by_price({products, price}))
- }, [dispatch, products, price])
+  useEffect(() => {
+    dispatch(filter_by_brand({ products, brand }))
+  }, [dispatch, products, brand])
+
+  useEffect(() => {
+    dispatch(filter_by_price({ products, price }))
+  }, [dispatch, products, price])
 
   return (
     <div className={styles.filter}>
@@ -42,9 +48,9 @@ export const ProductFilter = () => {
       <div className={styles.category}>
         {allCategories.map((cat, index) => {
           return (
-            <button 
-              key={index} 
-              type='button' 
+            <button
+              key={index}
+              type='button'
               className={`${category}` === cat ? `${styles.active}` : null}
               onClick={() => filterProducts(cat)}
             >
@@ -69,7 +75,7 @@ export const ProductFilter = () => {
         <input type='range' value={price} onChange={(e) => setPrice(e.target.value)} min={minPrice} max={maxPrice} />
       </div>
       <br />
-      <button className='--btn --btn-danger'>Clear Filters</button>
+      <button className='--btn --btn-danger' onClick={clearFilters}>Clear Filters</button>
     </div>
   )
 }
