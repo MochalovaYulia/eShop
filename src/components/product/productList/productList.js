@@ -15,7 +15,7 @@ export const ProductList = ({ products }) => {
   const filteredProducts = useSelector(selectFilteredProducts)
 
   const [currentPage, setCurrentPage] = useState(1)
-  const [productPerPage, setProductPerPage] = useState(2)
+  const [productPerPage, setProductPerPage] = useState(9)
   //получить текущий продукт
   const indexOfLastProduct = currentPage * productPerPage
   const indexOfFirstProduct = indexOfLastProduct - productPerPage
