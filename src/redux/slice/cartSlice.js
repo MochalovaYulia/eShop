@@ -27,7 +27,7 @@ const cartSlice = createSlice({
                 toast.success(`${action.payload.name} added to cart`, {position: 'top-left'})
             }
             // сохранение в локальное хранилище
-            localStorage.getItem('cartItems', JSON.stringify(state.cartItems))
+            localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
         }
     }
 })
