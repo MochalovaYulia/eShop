@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './Cart.module.scss'
-import { useSelector } from 'react-redux'
-import { selectCartItems, selectCartTotalAmount, selectCartTotalQuantity } from '../../redux/slice/cartSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { add_to_cart, decrease_to_cart, selectCartItems, selectCartTotalAmount, selectCartTotalQuantity } from '../../redux/slice/cartSlice'
 import { Link } from 'react-router-dom'
 import { FaTrashAlt } from 'react-icons/fa'
 import { Card } from '../../components/card/Card'
@@ -10,7 +10,15 @@ export const Cart = () => {
   const CartItems = useSelector(selectCartItems)
   const CartTotalAmount = useSelector(selectCartTotalAmount)
   const CartTotalQuantity = useSelector(selectCartTotalQuantity)
-  console.log(CartItems);
+  const dispatch = useDispatch()
+
+  const IncreaseCart = (cart) => {
+    dispatch(add_to_cart(cart))
+  }
+
+  const DecreaseCart = (cart) => {
+    dispatch(decrease_to_cart(cart))
+  }
 
   return (
     <section>
@@ -54,11 +62,11 @@ export const Cart = () => {
                           <td>{price}</td>
                           <td>
                             <div className={styles.count}>
-                              <button className='--btn'>-</button>
+                              <button className='--btn' onClick={() => DecreaseCart(cart)}>-</button>
                               <p>
                                 <b>{cartQuantity}</b>
                               </p>
-                              <button className='--btn'>+</button>
+                              <button className='--btn' onClick={() => IncreaseCart(cart)}>+</button>
                             </div>
                           </td>
                           <td>{(price * cartQuantity).toFixed(2)}</td>
@@ -76,6 +84,7 @@ export const Cart = () => {
                     <div>
                       <Link to='/#products'>&larr; Continue shopping</Link>
                     </div>
+                    <br />
                     <Card cardClass={styles.card}>
                       <p>{`Cart Item(s): ${CartTotalQuantity}`}</p>
                       <div className={styles.text}>

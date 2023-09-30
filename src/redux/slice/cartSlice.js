@@ -28,6 +28,26 @@ const cartSlice = createSlice({
             }
             // сохранение в локальное хранилище
             localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
+        }, decrease_to_cart(state, action) {
+            const productIndex = state.cartItems.findIndex(
+                (item) => item.id === action.payload.id
+            );
+    
+            if (state.cartItems[productIndex].cartQuantity > 1) {
+                state.cartItems[productIndex].cartQuantity -= 1;
+                toast.info(`${action.payload.name} decreased by one`, {
+                    position: "top-left",
+                });
+            } else if (state.cartItems[productIndex].cartQuantity === 1) {
+                const newCartItem = state.cartItems.filter(
+                    (item) => item.id !== action.payload.id
+                );
+                state.cartItems = newCartItem;
+                toast.success(`${action.payload.name} removed from cart`, {
+                    position: "top-left",
+                });
+            }
+            localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
         }
     }
 })
@@ -37,4 +57,4 @@ export const selectCartTotalQuantity = (state) => state.cart.cartTotalQuantity
 export const selectCartTotalAmount = (state) => state.cart.cartTotalAmount
 
 export default cartSlice.reducer
-export const { add_to_cart } = cartSlice.actions
+export const { add_to_cart, decrease_to_cart } = cartSlice.actions
