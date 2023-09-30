@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './Cart.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
-import { add_to_cart, decrease_to_cart, remove_from_cart, selectCartItems, selectCartTotalAmount, selectCartTotalQuantity } from '../../redux/slice/cartSlice'
+import { add_to_cart, clear_cart, decrease_to_cart, remove_from_cart, selectCartItems, selectCartTotalAmount, selectCartTotalQuantity } from '../../redux/slice/cartSlice'
 import { Link } from 'react-router-dom'
 import { FaTrashAlt } from 'react-icons/fa'
 import { Card } from '../../components/card/Card'
@@ -22,6 +22,10 @@ export const Cart = () => {
 
   const RemoveCart = (cart) => {
     dispatch(remove_from_cart(cart))
+  }
+
+  const ClearCart = () => {
+    dispatch(clear_cart())
   }
 
   return (
@@ -82,7 +86,7 @@ export const Cart = () => {
                 </tbody>
               </table>
                 <div className={styles.summary}>
-                  <button className='--btn --btn-danger'>Clear Cart</button>
+                  <button className='--btn --btn-danger' onClick={ClearCart}>Clear Cart</button>
                   <br />
                   <div className={styles.checkout}>
                     <div>
