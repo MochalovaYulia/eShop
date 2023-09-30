@@ -48,6 +48,13 @@ const cartSlice = createSlice({
                 });
             }
             localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
+        }, remove_from_cart(state, action) {
+            const newCartItem = state.cartItems.filter((item) => item.id !== action.payload.id)
+            state.cartItems = newCartItem;
+            toast.success(`${action.payload.name} removed from cart`, {
+                position: "top-left",
+            });
+            localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
         }
     }
 })
@@ -57,4 +64,4 @@ export const selectCartTotalQuantity = (state) => state.cart.cartTotalQuantity
 export const selectCartTotalAmount = (state) => state.cart.cartTotalAmount
 
 export default cartSlice.reducer
-export const { add_to_cart, decrease_to_cart } = cartSlice.actions
+export const { add_to_cart, decrease_to_cart, remove_from_cart } = cartSlice.actions
