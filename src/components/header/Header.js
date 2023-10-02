@@ -6,10 +6,11 @@ import { HiOutlineMenuAlt3 } from 'react-icons/hi'
 import { signOut, onAuthStateChanged } from "firebase/auth";
 import { auth } from '../../firebase/config'
 import { ToastContainer, toast } from 'react-toastify'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { remove_active_user, set_active_user } from '../../redux/slice/authSlice'
 import { ShowOnLogin, ShowOnLogout } from '../hiddenLink/HiddenLink'
 import { AdminOnlyLink } from '../adminOnlyRoute/AdminOnlyRoute'
+import { selectCartTotalQuantity } from '../../redux/slice/cartSlice'
 
 const logo = (
   <div className={style.logo}>
@@ -21,14 +22,6 @@ const logo = (
   </div>
 )
 
-const cart = (
-  <Link to='/cart'>
-    Cart
-    <FaShoppingCart size={20} />
-    <p>0</p>
-  </Link>
-)
-
 const activeLink = (
   ({ isActive }) => (isActive ? `${style.active}` : '')
 )
@@ -38,6 +31,15 @@ export const Header = () => {
   const navigate = useNavigate()
   const [displayName, setDisplayName] = useState('')
   const dispatch = useDispatch()
+  const CartTotalQuantity = useSelector(selectCartTotalQuantity)
+
+  const cart = (
+    <Link to='/cart'>
+      Cart
+      <FaShoppingCart size={20} />
+      <p>{CartTotalQuantity}</p>
+    </Link>
+  )
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {

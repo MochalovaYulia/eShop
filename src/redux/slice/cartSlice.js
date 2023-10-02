@@ -72,6 +72,16 @@ const cartSlice = createSlice({
                 return a + b
             }, 0)
             state.cartTotalAmount = totalAmount
+        }, calculate_cart_total_quantity(state) {
+            const array = []
+            state.cartItems.map((item) => {
+                const quantity = item.cartQuantity
+                return array.push(quantity)
+            })
+            const totalQuantity = array.reduce((a, b) => {
+                return a + b
+            }, 0)
+            state.cartTotalQuantity = totalQuantity
         }
     }
 })
@@ -81,4 +91,4 @@ export const selectCartTotalQuantity = (state) => state.cart.cartTotalQuantity
 export const selectCartTotalAmount = (state) => state.cart.cartTotalAmount
 
 export default cartSlice.reducer
-export const { add_to_cart, decrease_to_cart, remove_from_cart, clear_cart, calculate_subtotal } = cartSlice.actions
+export const { add_to_cart, decrease_to_cart, remove_from_cart, clear_cart, calculate_subtotal, calculate_cart_total_quantity } = cartSlice.actions
