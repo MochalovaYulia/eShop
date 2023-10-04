@@ -43,7 +43,7 @@ const cartSlice = createSlice({
                     (item) => item.id !== action.payload.id
                 );
                 state.cartItems = newCartItem;
-                toast.success(`${action.payload.name} removed from cart`, {
+                toast.info(`${action.payload.name} removed from cart`, {
                     position: "top-left",
                 });
             }
