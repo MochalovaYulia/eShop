@@ -3,13 +3,14 @@ import styles from './productItem.module.scss'
 import { Card } from '../../card/Card'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { add_to_cart } from '../../../redux/slice/cartSlice'
+import { add_to_cart, calculate_cart_total_quantity } from '../../../redux/slice/cartSlice'
 
 export const ProductItem = ({ grid, product, id, name, imageURL, desc, price }) => {
   const dispatch = useDispatch()
 
   const addToCart = () => {
     dispatch(add_to_cart(product))
+    dispatch(calculate_cart_total_quantity())
   }
 
   const shortenText = (text, n) => {

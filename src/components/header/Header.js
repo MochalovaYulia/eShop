@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { remove_active_user, set_active_user } from '../../redux/slice/authSlice'
 import { ShowOnLogin, ShowOnLogout } from '../hiddenLink/HiddenLink'
 import { AdminOnlyLink } from '../adminOnlyRoute/AdminOnlyRoute'
-import { selectCartTotalQuantity } from '../../redux/slice/cartSlice'
+import { calculate_cart_total_quantity, selectCartTotalQuantity } from '../../redux/slice/cartSlice'
 
 const logo = (
   <div className={style.logo}>
@@ -30,9 +30,23 @@ export const Header = () => {
   const [showMenu, setShowMenu] = useState(false)
   const navigate = useNavigate()
   const [displayName, setDisplayName] = useState('')
+  const [scrollPage, setScrollPage] = useState(false);
   const dispatch = useDispatch()
   const CartTotalQuantity = useSelector(selectCartTotalQuantity)
 
+  useEffect(() => {
+    dispatch(calculate_cart_total_quantity())
+  }, [])
+
+  const fixNavbar = () => {
+    if(window.scrollY > 1) {
+      setScrollPage(true)
+    } else {
+      setScrollPage(false)
+    }
+  }
+  window.addEventListener('scroll', fixNavbar)
+  
   const cart = (
     <Link to='/cart'>
       Cart
@@ -86,7 +100,7 @@ export const Header = () => {
     <>
       <ToastContainer />
 
-      <header>
+      <header className={scrollPage ? `${style.fixed}` : null}>
         <div className={style.header}>
           {logo}
 
