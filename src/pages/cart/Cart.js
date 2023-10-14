@@ -1,16 +1,19 @@
 import React, { useEffect } from 'react'
 import styles from './Cart.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
-import { add_to_cart, calculate_cart_total_quantity, calculate_subtotal, clear_cart, decrease_to_cart, remove_from_cart, selectCartItems, selectCartTotalAmount, selectCartTotalQuantity } from '../../redux/slice/cartSlice'
-import { Link } from 'react-router-dom'
+import { add_to_cart, calculate_cart_total_quantity, calculate_subtotal, clear_cart, decrease_to_cart, remove_from_cart, save_url, selectCartItems, selectCartTotalAmount, selectCartTotalQuantity } from '../../redux/slice/cartSlice'
+import { Link, useNavigate } from 'react-router-dom'
 import { FaTrashAlt } from 'react-icons/fa'
 import { Card } from '../../components/card/Card'
+import { selectedIsLoggedIn } from '../../redux/slice/authSlice'
 
 export const Cart = () => {
   const CartItems = useSelector(selectCartItems)
   const CartTotalAmount = useSelector(selectCartTotalAmount)
   const CartTotalQuantity = useSelector(selectCartTotalQuantity)
+  const isLoggedIn = useSelector(selectedIsLoggedIn)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const IncreaseCart = (cart) => {
     dispatch(add_to_cart(cart))
@@ -31,7 +34,20 @@ export const Cart = () => {
   useEffect(() => {
     dispatch(calculate_subtotal())
     dispatch(calculate_cart_total_quantity())
+    dispatch(save_url(''))
   }, [dispatch, CartItems])
+
+  const url = window.location.href
+
+  const checkout = () => {
+    if (isLoggedIn) {
+      navigate('/checout-details')
+    } else {
+      dispatch(save_url(url))
+      navigate('/login')
+    }
+  }
+
 
   return (
     <section>
@@ -105,7 +121,7 @@ export const Cart = () => {
                         <h3>{`$${CartTotalAmount.toFixed(2)}`}</h3>
                       </div>
                       <p>Taxes and shopping calculated at checkout</p>
-                      <button className='--btn --btn-primary --btn-block'>Checkout</button>
+                      <button className='--btn --btn-primary --btn-block' onClick={checkout}>Checkout</button>
                     </Card>
                   </div>
                 </div>
