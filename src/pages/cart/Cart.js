@@ -41,7 +41,7 @@ export const Cart = () => {
 
   const checkout = () => {
     if (isLoggedIn) {
-      navigate('/checout-details')
+      navigate('/checkout-details')
     } else {
       dispatch(save_url(url))
       navigate('/login')
