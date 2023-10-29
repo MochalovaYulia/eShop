@@ -20,5 +20,8 @@ const CheckoutSlice = createSlice({
     }
 })
 
+export const selectShippingAddress = state => state.checkout.shippingAddress
+export const selectBillingAddress = state => state.checkout.billingAddress
+
 export default CheckoutSlice.reducer
 export const {save_shipping_address, save_billing_address} = CheckoutSlice.actions 
