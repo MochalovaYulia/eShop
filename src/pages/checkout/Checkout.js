@@ -6,13 +6,16 @@ import { selectedEmail } from '../../redux/slice/authSlice'
 import { selectBillingAddress, selectShippingAddress } from '../../redux/slice/checkoutSlice'
 import { toast } from 'react-toastify'
 import { CheckoutForm } from '../../components/checkoutForm/CheckoutForm'
+import { Elements } from '@stripe/react-stripe-js'
 
+console.log(process.env.REACT_APP_STRIPE_PK);
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PK)
 
 export const Checkout = () => {
   const [message, setMessage] = useState('Initializing Checkout...')
   const [clientSecret, setClientSecret] = useState("");
   const dispatch = useDispatch()
+
   const cartItem = useSelector(selectCartItems)
   const totalAmount = useSelector(selectCartTotalAmount)
   const customerEmail = useSelector(selectedEmail)
@@ -32,7 +35,7 @@ export const Checkout = () => {
     fetch("http://localhost:4242/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         items: cartItem,
         userEmail: customerEmail,
         shipping: shippingAddress,
@@ -41,23 +44,22 @@ export const Checkout = () => {
       }),
     })
       .then((res) => {
-        if(res.ok) {
-          return res.json()
-        } else {
-          return res.json().then((json) => Promise.reject(json))
+        if (res.ok) {
+          return res.json();
         }
+        return res.json().then((json) => Promise.reject(json));
       })
       .then((data) => {
-        setClientSecret(data.clientSecret)
+        setClientSecret(data.clientSecret);
       })
       .catch((error) => {
-        setMessage('Failed to initialize checkout')
-        toast.error('Something went wrong')
-      })
+        setMessage("Failed to initialize checkout");
+        toast.error("Something went wrong!!!");
+      });
   }, []);
 
   const appearance = {
-    theme: 'stripe',
+    theme: "stripe",
   };
   const options = {
     clientSecret,
@@ -67,9 +69,7 @@ export const Checkout = () => {
   return (
     <>
       <section>
-        <div className='container'>
-          {!clientSecret && <h3>{message}</h3>}
-        </div>
+        <div className="container">{!clientSecret && <h3>{message}</h3>}</div>
       </section>
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
@@ -77,5 +77,5 @@ export const Checkout = () => {
         </Elements>
       )}
     </>
-  )
-}
+  );
+};
