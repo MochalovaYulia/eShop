@@ -5,12 +5,29 @@ import { Card } from "../card/Card";
 import { CheckoutSummary } from "../checkoutSummary/CheckoutSummary";
 import spinnerImg from '../../assets/spinner.jpg'
 import { toast } from "react-toastify";
+import { Timestamp, addDoc, collection } from "firebase/firestore";
+import { useDispatch, useSelector } from "react-redux";
+import { selectedEmail, selectedUserId } from "../../redux/slice/authSlice";
+import { clear_cart, selectCartItems, selectCartTotalAmount } from "../../redux/slice/cartSlice";
+import { selectShippingAddress } from "../../redux/slice/checkoutSlice";
+import { db } from '../../firebase/config'
+import { useNavigate } from "react-router-dom";
+
 
 export const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const userId = useSelector(selectedUserId)
+  const userEmail = useSelector(selectedEmail)
+  const cartItem = useSelector(selectCartItems)
+  const shippingAddress = useSelector(selectShippingAddress)
+  const totalAmount = useSelector(selectCartTotalAmount)
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!stripe) {
@@ -27,7 +44,30 @@ export const CheckoutForm = () => {
   }, [stripe]);
 
   const saveOrder = () => {
-    console.log('Order');
+
+    const today = new Date()
+    const date = today.toDateString()
+    const time = today.toLocaleTimeString()
+    const orderConfig = {
+      userId,
+      userEmail,
+      cartItem,
+      orderDate: date,
+      ordetTime: time,
+      shippingAddress,
+      orderAmmount: totalAmount,
+      orderStatus: 'Order Placed..',
+      createdAt: Timestamp.now().toDate()
+    }
+
+    try {
+      addDoc(collection(db, 'orders'), orderConfig)
+      dispatch(clear_cart())
+      toast.success('Order Saved')
+      navigate('/checkout-success')
+    } catch (error) {
+      toast.error(error.message)
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -46,7 +86,7 @@ export const CheckoutForm = () => {
         confirmParams: {
           return_url: "http://localhost:3000/checkout-success",
         },
-        // redirect: "if_required",
+        redirect: "if_required",
       })
       .then((result) => {
         // ok - paymentIntent // bad - error
