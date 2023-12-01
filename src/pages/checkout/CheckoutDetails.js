@@ -100,14 +100,14 @@ export const CheckoutDetails = () => {
                                 value={shippingAddress.state}
                                 onChange={(e) => handleShipping(e)}
                             />
-                            <label>Postal Code:</label>
-                            <input
+                            {/* <label>Postal Code:</label> */}
+                            {/* <input
                                 type='text'
                                 placeholder='Postal Code'
                                 name='postalCode'
                                 value={shippingAddress.postal_code}
                                 onChange={(e) => handleShipping(e)}
-                            />
+                            /> */}
                             <label>Country:</label>
                             <CountryDropdown
                                 className={styles.select} 
@@ -178,14 +178,14 @@ export const CheckoutDetails = () => {
                                 value={billingAddress.state}
                                 onChange={(e) => handleBilling(e)}
                             />
-                            <label>Postal Code:</label>
-                            <input
+                            {/* <label>Postal Code:</label> */}
+                            {/* <input
                                 type='text'
                                 placeholder='Postal Code'
                                 name='postalCode'
                                 value={billingAddress.postal_code}
                                 onChange={(e) => handleBilling(e)}
-                            />
+                            /> */}
                             <label>Country:</label>
                             <CountryDropdown
                                 className={styles.select} 

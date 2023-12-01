@@ -14,6 +14,7 @@ import { CheckoutDetails } from "./pages/checkout/CheckoutDetails";
 import { Checkout } from "./pages/checkout/Checkout";
 import { CheckoutSuccess } from "./pages/checkout/CheckoutSuccess";
 import { OrderHistory } from "./pages/orderHistory/OrderHistory";
+import { OrderDetails } from "./pages/orderDetails/OrderDetails";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/checkout-success" element={<CheckoutSuccess />} />
             <Route path="/order-history" element={<OrderHistory />} />
+            <Route path="/order-details:id" element={<OrderDetails />} />
           </Routes>
         <Footer />
       </BrowserRouter>

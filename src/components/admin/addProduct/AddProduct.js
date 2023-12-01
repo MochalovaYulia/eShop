@@ -87,7 +87,7 @@ export const AddProduct = () => {
         category: product.category,
         brand: product.brand,
         desc: product.desc,
-        createAt: Timestamp.now().toDate()
+        createdAt: Timestamp.now().toDate()
       });
       setIsLoading(false)
       setUploadProgress(0)
@@ -118,7 +118,7 @@ export const AddProduct = () => {
         category: product.category,
         brand: product.brand,
         desc: product.desc,
-        createAt:productEdit.createAt,
+        createdAt:productEdit.createdAt,
         edit: Timestamp.now().toDate(),
       });
 

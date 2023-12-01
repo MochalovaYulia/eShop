@@ -1,8 +1,10 @@
 import React from 'react'
 import styles from './OrderDetails.module.scss'
 
-export const orderDetails = () => {
+export const OrderDetails = () => {
   return (
-    <div>orderDetails</div>
+    <div>
+      orderDetails
+    </div>
   )
 }
