@@ -6,12 +6,14 @@ import { db } from '../../../firebase/config'
 import spinnerImg from '../../../assets/spinner.jpg'
 import { add_to_cart, calculate_cart_total_quantity, decrease_to_cart, selectCartItems } from '../../../redux/slice/cartSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { useFetchDocument } from '../../../customHooks/useFetchDocument'
 
 export const ProductDetails = () => {
     const { id } = useParams()
     const [product, setProduct] = useState(null)
     const dispatch = useDispatch()
     const cartItems = useSelector(selectCartItems)
+    const {document} = useFetchDocument('product', id)
 
     const cart = cartItems.find((cart) => cart.id === id)
     const isCartAdded = cartItems.findIndex((cart) => {
@@ -19,23 +21,24 @@ export const ProductDetails = () => {
     })
 
     useEffect(() => {
-        getProduct()
-    }, [])
+        console.log("Fetched document:", document);
+        setProduct(document);
+    }, [document]);
 
-    const getProduct = async () => {
-        const docRef = doc(db, "product", id);
-        const docSnap = await getDoc(docRef);
+    // const getProduct = async () => {
+    //     const docRef = doc(db, "product", id);
+    //     const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-            const obj = {
-                id: id,
-                ...docSnap.data(),
-            }
-            setProduct(obj)
-        } else {
-            console.log("No such document!");
-        }
-    }
+    //     if (docSnap.exists()) {
+    //         const obj = {
+    //             id: id,
+    //             ...docSnap.data(),
+    //         }
+    //         setProduct(obj)
+    //     } else {
+    //         console.log("No such document!");
+    //     }
+    // }
 
     const addToCart = (product) => {
         dispatch(add_to_cart(product))
