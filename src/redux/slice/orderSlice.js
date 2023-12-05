@@ -10,7 +10,7 @@ const orderSlice = createSlice({
     reducers: {
         store_orders (state, action) {
             state.orderHistory = action.payload
-            console.log(action.payload);
+            // console.log(action.payload);
         }
     }
 })
