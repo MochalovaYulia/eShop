@@ -12,7 +12,7 @@ export const OrderDetails = () => {
   useEffect(() => {
     setOrder(document)
   }, [document])
-console.log(document);
+  
   return (
     <section>
       <div className={`container ${styles.table}`}>
@@ -51,7 +51,7 @@ console.log(document);
           </thead>
           <tbody>
             {order.cartItem.map((cart, index) => {
-              const {id, name, price, imageUrl, cartQuantity} = cart
+              const {id, name, price, imageURL, cartQuantity} = cart
               return (
                 <tr key={id}>
                   <td>
@@ -60,14 +60,12 @@ console.log(document);
                   <td>
                     <p>
                       <b>{name}</b>
-                      <p>
-                        <img
-                          src={imageUrl}
-                          alt={name}
-                          style={{ width: "100px" }}
-                        />
-                      </p>
                     </p>
+                    <img
+                      src={imageURL}
+                      alt={name}
+                      style={{ width: "100px" }}
+                    />
                   </td>
                   <td>{price}</td>
                   <td>{cartQuantity}</td>
