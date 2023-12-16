@@ -42,8 +42,8 @@ export const ReviewProduct = () => {
     try {
       addDoc(collection(db, 'reviews'), reviewConfig)
       toast.success('Review submitted successfully')
-      rate(0)
-      review('')
+      setRate(0)
+      setReview('')
     } catch (error) {
       toast.error(error.message)
     }
