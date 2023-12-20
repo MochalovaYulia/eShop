@@ -19,7 +19,7 @@ export const Admin = () => {
           <Route path='home' element={<Home />} />
           <Route path='all-product' element={<ViewProduct />} />
           <Route path='add-product/:id' element={<AddProduct />} />
-          <Route path='oders' element={<Oders />} />
+          <Route path='orders' element={<Oders />} />
           <Route path='order-details/:id' element={<OrderDetails />} />
         </Routes>
       </div>

@@ -34,8 +34,8 @@ export const Navbar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to='/admin/oders' className={activeLink}>
-              Oders 
+            <NavLink to='/admin/orders' className={activeLink}>
+              View Orders 
             </NavLink>
           </li>
         </ul>

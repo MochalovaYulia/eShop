@@ -23,8 +23,8 @@ export const Oders = () => {
   return (
     <>
       <div className={styles.order}>
-        <h2>Your Order History</h2>
-        <p>Open an order to leave a <b>ProductReview</b></p>
+        <h2>All Orders</h2>
+        <p>Open an order to<b>Change Order Status</b></p>
         <br />
         <>
           {isLoading && <Loader />}
