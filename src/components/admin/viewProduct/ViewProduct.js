@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './ViewProduct.module.scss'
 import { toast } from 'react-toastify'
 import { deleteDoc, doc } from 'firebase/firestore'
@@ -11,10 +11,14 @@ import Notiflix from 'notiflix'
 import { selectProduct, store_products } from '../../../redux/slice/productSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFetchCollection } from '../../../customHooks/useFetchCollection'
+import { filter_by_search, selectFilteredProducts } from '../../../redux/slice/filterSlice'
+import { Search } from '../../search/Search'
 
 export const ViewProduct = () => {
+  const [search, setSearch] = useState('')
   const { data, isLoading } = useFetchCollection('product')
   const products = useSelector(selectProduct)
+  const filteredProduct = useSelector(selectFilteredProducts)
   
   const dispatch = useDispatch()
 
@@ -25,6 +29,10 @@ export const ViewProduct = () => {
       })
     );
   }, [dispatch, data])
+
+  useEffect(() => {
+    dispatch(filter_by_search({products, search}))
+  }, [dispatch, search, products])
 
   const confirmDelete = (id, imageURL) => {
     Notiflix.Confirm.show(
@@ -62,7 +70,13 @@ export const ViewProduct = () => {
       {isLoading && <Loader />}
       <div className={styles.table}>
         <h2>All Products</h2>
-        {products.length === 0 ? (
+        <div className={styles.search}>
+          <p>
+            <b>{filteredProduct.length}</b> products found
+          </p>
+          <Search value={search} onChange={(e) => setSearch(e.target.value)} />
+        </div>
+        {filteredProduct.length === 0 ? (
           <p>No Product Found.</p>
         ) : (
           <table>
@@ -76,7 +90,7 @@ export const ViewProduct = () => {
                   <th>Action</th>
                 </tr>
               </thead>
-            {products.map((product, index) => {
+            {filteredProduct.map((product, index) => {
               const {id, name, imageURL, price, category} = product;
               return (
                 <tbody key={id}>
