@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectProduct, store_products } from '../../../redux/slice/productSlice'
 import { calc_total_order_amount, selectorOrderAmount, selectorOrderHistory, store_orders } from '../../../redux/slice/orderSlice'
 import { useFetchCollection } from '../../../customHooks/useFetchCollection'
+import { Chart } from '../../chart/Chart'
 
   const earningsIcon = <AiFillDollarCircle size={30} color='b624ff' />
   const productsIcon = <BsCart4 size={30} color='1f93ff' />
@@ -55,6 +56,7 @@ export const Home = () => {
           icon={ordersIcon}
         />
       </div>
+      <Chart />
     </div>
   )
 }
