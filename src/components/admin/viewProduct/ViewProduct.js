@@ -13,12 +13,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useFetchCollection } from '../../../customHooks/useFetchCollection'
 import { filter_by_search, selectFilteredProducts } from '../../../redux/slice/filterSlice'
 import { Search } from '../../search/Search'
+import { Pagination } from '../../pagination/Pagination'
 
 export const ViewProduct = () => {
   const [search, setSearch] = useState('')
   const { data, isLoading } = useFetchCollection('product')
   const products = useSelector(selectProduct)
   const filteredProduct = useSelector(selectFilteredProducts)
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const [productPerPage, setProductPerPage] = useState(10)
+  //получить текущий продукт
+  const indexOfLastProduct = currentPage * productPerPage
+  const indexOfFirstProduct = indexOfLastProduct - productPerPage
+  const currentProducts = filteredProduct.slice(indexOfFirstProduct, indexOfLastProduct)
   
   const dispatch = useDispatch()
 
@@ -76,7 +84,7 @@ export const ViewProduct = () => {
           </p>
           <Search value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
-        {filteredProduct.length === 0 ? (
+        {currentProducts.length === 0 ? (
           <p>No Product Found.</p>
         ) : (
           <table>
@@ -90,7 +98,7 @@ export const ViewProduct = () => {
                   <th>Action</th>
                 </tr>
               </thead>
-            {filteredProduct.map((product, index) => {
+            {currentProducts.map((product, index) => {
               const {id, name, imageURL, price, category} = product;
               return (
                 <tbody key={id}>
@@ -115,6 +123,12 @@ export const ViewProduct = () => {
             })}
           </table>
         )}
+        <Pagination 
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          productPerPage={productPerPage}
+          totalProducts={filteredProduct.length}
+        />
       </div>
     </>
   )

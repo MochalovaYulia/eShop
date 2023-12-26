@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styles from './Paginatiom.module.scss'
 
 export const Pagination = ({ currentPage, setCurrentPage, productPerPage, totalProducts }) => {
+  console.log({currentPage, setCurrentPage, productPerPage, totalProducts});
   const totalPages = totalProducts / productPerPage
   const pageNumbers = []
   const [numberPageLimit, setNumberPageLimit] = useState(5)
